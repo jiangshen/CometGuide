@@ -34,6 +34,9 @@ public class ProductList extends AppCompatActivity {
     TextView categoryTextView;
     TextView characterTextView;
 
+    int[] images;
+    List<Product> nearestBeaconProductsList;
+
     private static final int recyclerViewImagesElectrical[] = {
             R.drawable.eone, R.drawable.etwo, R.drawable.ethree, R.drawable.efour, R.drawable.efive,
             R.drawable.esix, R.drawable.eseven
@@ -124,10 +127,10 @@ public class ProductList extends AppCompatActivity {
                 if (!list.isEmpty()) {
                     Beacon nearestBeacon = list.get(0);
 
-                    List<Product> nearestBeaconProductsList = productsNearBeacon(nearestBeacon);
+                    nearestBeaconProductsList = productsNearBeacon(nearestBeacon);
 
                     String majorMinorKeyString = String.format("%d:%d", nearestBeacon.getMajor(), nearestBeacon.getMinor());
-                    int[] images = keyViewHashMap.get(majorMinorKeyString);
+                    images = keyViewHashMap.get(majorMinorKeyString);
 
                     categoryTextView.setText(keyCategoryHashMap.get(majorMinorKeyString));
                     characterTextView.setText(keyCategoryHashMap.get(majorMinorKeyString).substring(0,1));
@@ -189,7 +192,8 @@ public class ProductList extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int i) {
 //                        Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_SHORT).show();
-                        transition();
+
+                        transition(i);
                     }
                 })
         );
@@ -208,8 +212,14 @@ public class ProductList extends AppCompatActivity {
         return av;
     }
 
-    private void transition() {
+    private void transition(int i) {
         Intent intent = new Intent(this, ProductInfo.class);
+        intent.putExtra("name", nearestBeaconProductsList.get(i).getName());
+        intent.putExtra("model_number", nearestBeaconProductsList.get(i).getModelNumber());
+        intent.putExtra("price", nearestBeaconProductsList.get(i).getPrice());
+        intent.putExtra("stock_quantity", nearestBeaconProductsList.get(i).getStockQuantity());
+        intent.putExtra("image", images[i]);
+
         startActivity(intent);
     }
 }
