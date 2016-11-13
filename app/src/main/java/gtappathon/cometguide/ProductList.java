@@ -27,10 +27,15 @@ public class ProductList extends AppCompatActivity {
 
     public RecyclerView mRecyclerView;
     public AndroidDataAdapter mAdapter;
+    public static Map<String, int[]> keyViewHashMap = new HashMap<>();
 
-    private final int recyclerViewImages[] = {
+    private static final int recyclerViewImagesElectrical[] = {
             R.drawable.eone, R.drawable.etwo, R.drawable.ethree, R.drawable.efour, R.drawable.efive,
             R.drawable.esix, R.drawable.eseven
+    };
+
+    private static final int recyclerViewImagesAppliances[] = {
+            R.drawable.aone, R.drawable.atwo, R.drawable.athree, R.drawable.afour, R.drawable.afive
     };
 
     private BeaconManager beaconManager;
@@ -39,11 +44,12 @@ public class ProductList extends AppCompatActivity {
     private static Map<String, List<Product>> BEACON_PRODUCT_MAP = null;
 
     static {
+        // Mint Cocktail Beacon = Aisle 1 = Electrical
+
         Map<String, List<Product>> beaconProductMap = new HashMap<>();
 
         ArrayList<Product> electricalArrayList = new ArrayList<>();
-        electricalArrayList.add(new Product("1-Gang 18 cu. in. Round Old Work Ceiling Box",
-                "B618RR", 1.94, 15));
+        electricalArrayList.add(new Product("1-Gang 18 cu. in. Round Old Work Ceiling Box", "B618RR", 1.94, 15));
         electricalArrayList.add(new Product("AFC Cable Systems 1/2 in. x 100 ft. Non-Metallic Liquidtight Conduit", "6002-30-00", 39.17, 22));
         electricalArrayList.add(new Product("Romex 1000 ft. 12/2 Solid SIMpull NM-B Wire", "28828201", 193.00, 7));
         electricalArrayList.add(new Product("Leviton 15 Amp Tamper-Resistant Combination Switch and Outlet, Ivory", "R62-T5225-0WS", 7.99, 43));
@@ -51,11 +57,20 @@ public class ProductList extends AppCompatActivity {
         electricalArrayList.add(new Product("AFINIA H-Series H800 3D-Printer", "H800", 1899.00, 13));
         electricalArrayList.add(new Product("Samsung 43 in. Class LED 1080p 60Hz Internet Enabled HDTV with Wi-Fi Direct", "UN43J5200AF", 499.99, 59));
 
-        // Mint Cocktail Beacon = Aisle 1
         beaconProductMap.put("19272:25761", electricalArrayList);
+        keyViewHashMap.put("19272:25761", recyclerViewImagesElectrical);
 
-        // Icy Marshmallow Beacon = Aisle 2
+        // Icy Marshmallow Beacon = Aisle 2 = Appliances
+
+        ArrayList<Product> appliancesArrayList = new ArrayList<>();
+        appliancesArrayList.add(new Product("LG Electronics 4.5 cu. ft. High Efficiency Front Load Washer with Steam in Graphite Steel, Energy Star", "WF45K6200AW", 599.00, 8));
+        appliancesArrayList.add(new Product("Maxx Cold X-Series 49 cu. ft. Double Door Commercial Reach In Upright Freezer in Stainless Steel", "MXCF-49FD", 3151.53, 18));
+        appliancesArrayList.add(new Product("BLACK+DECKER 6-Slice Digital Convection Toaster Oven in Stainless Steel", "CTO6335S", 64.99, 21));
+        appliancesArrayList.add(new Product("Hoover WindTunnel 2 Pet Rewind Bagless Upright Vacuum Cleaner", "UH70832", 118.00, 32));
+        appliancesArrayList.add(new Product("Carrier Installed Comfort Series Heat Pump", "HSINSTCARCHP", 2499.00, 25));
+
         beaconProductMap.put("19272:58530", new ArrayList<Product>());
+        keyViewHashMap.put("19272:58530", recyclerViewImagesAppliances);
 
         // Blueberry Blue Beacon = Aisle 3
 
@@ -82,6 +97,7 @@ public class ProductList extends AppCompatActivity {
                     Beacon nearestBeacon = list.get(0);
 
                     List<Product> nearestBeaconProductsList = productsNearBeacon(nearestBeacon);
+                    int[] images = keyViewHashMap.get(String.format("%d:%d", nearestBeacon.getMajor(), nearestBeacon.getMinor()));
 
                     String s = "";
 
@@ -90,7 +106,7 @@ public class ProductList extends AppCompatActivity {
                     }
                     
 //                    TODO update
-                    mAdapter.updateData(prepareData(nearestBeaconProductsList));
+                    mAdapter.updateData(prepareData(nearestBeaconProductsList, images));
                     
                     Log.d("Beacon: " + nearestBeacon.getMinor(), ". Products: " + s);
 
@@ -141,8 +157,8 @@ public class ProductList extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        // FIXME: !!!!!!
-        ArrayList<AndroidVersion> av = prepareData(new ArrayList<Product>());
+        int[] emptyImagesArray = {};
+        ArrayList<AndroidVersion> av = prepareData(new ArrayList<Product>(), emptyImagesArray);
         mAdapter = new AndroidDataAdapter(getApplicationContext(), av);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -161,7 +177,7 @@ public class ProductList extends AppCompatActivity {
 //                                for (int j = 0; j < p.size(); j++) {
 //                                    AndroidVersion mAndroidVersion = new AndroidVersion();
 //                                    mAndroidVersion.setAndroidVersionName(p.get(j).getName());
-//                                    mAndroidVersion.setrecyclerViewImage(recyclerViewImages[j]);
+//                                    mAndroidVersion.setrecyclerViewImage(recyclerViewImagesElectrical[j]);
 //                                    av.add(mAndroidVersion);
 //                                }
 //
@@ -207,14 +223,14 @@ public class ProductList extends AppCompatActivity {
 
     }
 
-    private ArrayList<AndroidVersion> prepareData(List<Product> nearestBeaconProductsList) {
+    private ArrayList<AndroidVersion> prepareData(List<Product> nearestBeaconProductsList, int[] images) {
 
         ArrayList<AndroidVersion> av = new ArrayList<>();
 
         for (int i = 0; i < nearestBeaconProductsList.size(); i++) {
             AndroidVersion mAndroidVersion = new AndroidVersion();
             mAndroidVersion.setAndroidVersionName(nearestBeaconProductsList.get(i).getName());
-            mAndroidVersion.setrecyclerViewImage(recyclerViewImages[i]);
+            mAndroidVersion.setrecyclerViewImage(images[i]);
             av.add(mAndroidVersion);
         }
         return av;
