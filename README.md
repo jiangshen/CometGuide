@@ -1,1 +1,1 @@
-# ProductFinder
+# CometGuide
