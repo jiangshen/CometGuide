@@ -188,7 +188,7 @@ public class ProductList extends AppCompatActivity {
                 new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int i) {
-                        Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_SHORT).show();
                         transition();
                     }
                 })
