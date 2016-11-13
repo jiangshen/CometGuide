@@ -2,14 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
 
-    <ImageView
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pdt_img"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"/>
+        android:layout_margin="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/image"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:src="@drawable/tools"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text"
+                android:gravity="center_horizontal"
+                android:text="Product"
+                android:background="#80000000"
+                android:padding="5dp"
+                android:textColor="#eee"
+                android:textStyle="bold"
+                android:layout_alignBottom="@+id/image"
+                />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
 
 
 </LinearLayout>
