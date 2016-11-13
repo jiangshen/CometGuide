@@ -169,7 +169,6 @@ public class ProductList extends AppCompatActivity {
                         switch (i) {
                             case 0:
                                 Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-
 //                                ArrayList<AndroidVersion> av = new ArrayList<>();
 //
 //                                List<Product> p = BEACON_PRODUCT_MAP.get("19272:58530");
