@@ -1,5 +1,6 @@
 package gtappathon.cometguide;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -167,56 +168,8 @@ public class ProductList extends AppCompatActivity {
                 new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int i) {
-                        switch (i) {
-                            case 0:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-//                                ArrayList<AndroidVersion> av = new ArrayList<>();
-//
-//                                List<Product> p = BEACON_PRODUCT_MAP.get("19272:58530");
-//
-//                                for (int j = 0; j < p.size(); j++) {
-//                                    AndroidVersion mAndroidVersion = new AndroidVersion();
-//                                    mAndroidVersion.setAndroidVersionName(p.get(j).getName());
-//                                    mAndroidVersion.setrecyclerViewImage(recyclerViewImagesElectrical[j]);
-//                                    av.add(mAndroidVersion);
-//                                }
-//
-//                                mAdapter.updateData(av);
-                                break;
-                            case 1:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 2:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 3:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 4:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 5:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 6:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 7:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 8:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 9:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 10:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                            case 11:
-                                Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
-                                break;
-                        }
+                        Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_SHORT).show();
+                        transition();
                     }
                 })
         );
@@ -237,5 +190,10 @@ public class ProductList extends AppCompatActivity {
             av.add(mAndroidVersion);
         }
         return av;
+    }
+
+    private void transition() {
+        Intent intent = new Intent(this, ProductInfo.class);
+        startActivity(intent);
     }
 }
