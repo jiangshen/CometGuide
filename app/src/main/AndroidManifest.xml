@@ -12,13 +12,12 @@
             android:theme="@style/AppTheme.ProductList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ProductInfo"
-            android:theme="@style/AppTheme.ProductList">
+            android:theme="@style/AppTheme.ProductInfo">
         </activity>
     </application>
 
