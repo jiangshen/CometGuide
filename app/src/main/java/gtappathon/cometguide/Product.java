@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class Product {
     private String name;
+    private String modelNumber;
     private double price;
     private int stockQuantity;
     private HashMap<Object, Object> extrasHashMap;
@@ -16,10 +17,18 @@ public class Product {
 
     }
 
-    public Product(String name, double price, int stockQuantity, HashMap<Object, Object> extrasHashMap) {
+    public Product(String name, String modelNumber, double price, int stockQuantity) {
         this.name = name;
+        this.modelNumber = modelNumber;
         this.price = price;
         this.stockQuantity = stockQuantity;
+    }
+
+    public Product(String name, String modelNumber, int stockQuantity, double price, HashMap<Object, Object> extrasHashMap) {
+        this.name = name;
+        this.modelNumber = modelNumber;
+        this.stockQuantity = stockQuantity;
+        this.price = price;
         this.extrasHashMap = extrasHashMap;
     }
 
@@ -29,6 +38,14 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getModelNumber() {
+        return modelNumber;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
     }
 
     public double getPrice() {
