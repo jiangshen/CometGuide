@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.util.Log;
@@ -29,6 +30,9 @@ public class ProductList extends AppCompatActivity {
     public RecyclerView mRecyclerView;
     public AndroidDataAdapter mAdapter;
     public static Map<String, int[]> keyViewHashMap = new HashMap<>();
+    public static Map<String, String> keyCategoryHashMap = new HashMap<>();
+    TextView categoryTextView;
+    TextView characterTextView;
 
     private static final int recyclerViewImagesElectrical[] = {
             R.drawable.eone, R.drawable.etwo, R.drawable.ethree, R.drawable.efour, R.drawable.efive,
@@ -37,6 +41,11 @@ public class ProductList extends AppCompatActivity {
 
     private static final int recyclerViewImagesAppliances[] = {
             R.drawable.aone, R.drawable.atwo, R.drawable.athree, R.drawable.afour, R.drawable.afive
+    };
+
+    private static final int recyclerViewImagesPlumbing[] = {
+            R.drawable.pone, R.drawable.ptwo, R.drawable.pthree, R.drawable.pfour, R.drawable.pfive,
+            R.drawable.psix, R.drawable.pseven, R.drawable.peight
     };
 
     private BeaconManager beaconManager;
@@ -60,6 +69,7 @@ public class ProductList extends AppCompatActivity {
 
         beaconProductMap.put("19272:25761", electricalArrayList);
         keyViewHashMap.put("19272:25761", recyclerViewImagesElectrical);
+        keyCategoryHashMap.put("19272:25761", "Electrical");
 
         // Icy Marshmallow Beacon = Aisle 2 = Appliances
 
@@ -72,10 +82,24 @@ public class ProductList extends AppCompatActivity {
 
         beaconProductMap.put("19272:58530", appliancesArrayList);
         keyViewHashMap.put("19272:58530", recyclerViewImagesAppliances);
+        keyCategoryHashMap.put("19272:58530", "Appliances");
 
-        // Blueberry Blue Beacon = Aisle 3
+        // Blueberry Blue Beacon = Aisle 3 = Plumbing
 
-        beaconProductMap.put("19272:1600", new ArrayList<Product>());
+        ArrayList<Product> plumbingArrayList = new ArrayList<>();
+        plumbingArrayList.add(new Product("Westinghouse 52 Gal. 5500-Watt Lifetime Residential Electric Water Heater with durable 316L Stainless Steel Tank", "WER052C2X055", 599.99, 16));
+        plumbingArrayList.add(new Product("NIBCO 3/4 in. Lead-Free Copper and CPVC CTS Silicon Alloy Slip x FIPT Transition Union", "C4733-3-LF", 8.61, 64));
+        plumbingArrayList.add(new Product("3/4 in. Bronze Pressure Vacuum Breaker", "800M4-QT", 67.65, 34));
+        plumbingArrayList.add(new Product("Instant Power 67.6 oz. Hair and Grease Drain Opener", "1970", 10.98, 57));
+        plumbingArrayList.add(new Product("RIDGID K750 115-Volt Drum Machine with 5/8 in. Pigtail", "51402", 1548.14, 16));
+        plumbingArrayList.add(new Product("RID-X 19.6 oz. Professional Powder 2-Dose Septic Tank Treatment", "19200-83623", 12.47, 40));
+        plumbingArrayList.add(new Product("Rain Bird 25 - 41 ft. P5R Professional Grade Riser-Mounted Polymer Impact Sprinkler", "P5R", 6.48, 22));
+        plumbingArrayList.add(new Product("Peerless Choice 2-Handle Wall Mount Kitchen Faucet in Chrome", "P299305LF", 60.44, 31));
+
+
+        beaconProductMap.put("19272:1600", plumbingArrayList);
+        keyViewHashMap.put("19272:1600", recyclerViewImagesPlumbing);
+        keyCategoryHashMap.put("19272:1600", "Plumbing");
 
         BEACON_PRODUCT_MAP = Collections.unmodifiableMap(beaconProductMap);
     }
@@ -84,6 +108,9 @@ public class ProductList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+
+        categoryTextView = (TextView) findViewById(R.id.tv_title);
+        characterTextView = (TextView) findViewById(R.id.tv_title_s);
 
         SystemRequirementsChecker.checkWithDefaultDialogs(this);
 
@@ -99,19 +126,12 @@ public class ProductList extends AppCompatActivity {
 
                     List<Product> nearestBeaconProductsList = productsNearBeacon(nearestBeacon);
 
-                    int[] images = keyViewHashMap.get(String.format("%d:%d", nearestBeacon.getMajor(), nearestBeacon.getMinor()));
+                    String majorMinorKeyString = String.format("%d:%d", nearestBeacon.getMajor(), nearestBeacon.getMinor());
+                    int[] images = keyViewHashMap.get(majorMinorKeyString);
 
-                    String s = "";
-
-                    for (int i = 0; i < nearestBeaconProductsList.size(); i++) {
-                        s += nearestBeaconProductsList.get(i).getName() + ", ";
-                    }
-                    
-//                    TODO update
+                    categoryTextView.setText(keyCategoryHashMap.get(majorMinorKeyString));
+                    characterTextView.setText(keyCategoryHashMap.get(majorMinorKeyString).substring(0,1));
                     mAdapter.updateData(prepareData(nearestBeaconProductsList, images));
-                    
-//                    Log.d("Beacon: " + nearestBeacon.getMinor(), ". Products: " + s);
-
 
                 }
             }
@@ -177,15 +197,11 @@ public class ProductList extends AppCompatActivity {
     }
 
     private ArrayList<AndroidVersion> prepareData(List<Product> nearestBeaconProductsList, int[] images) {
-
-        Log.d("Called!", String.valueOf(nearestBeaconProductsList.size()));
-
         ArrayList<AndroidVersion> av = new ArrayList<>();
 
         for (int i = 0; i < nearestBeaconProductsList.size(); i++) {
             AndroidVersion mAndroidVersion = new AndroidVersion();
             mAndroidVersion.setAndroidVersionName(nearestBeaconProductsList.get(i).getName());
-            Log.d("Log", nearestBeaconProductsList.get(i).getName());
             mAndroidVersion.setrecyclerViewImage(images[i]);
             av.add(mAndroidVersion);
         }
