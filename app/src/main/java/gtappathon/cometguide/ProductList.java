@@ -69,7 +69,7 @@ public class ProductList extends AppCompatActivity {
         appliancesArrayList.add(new Product("Hoover WindTunnel 2 Pet Rewind Bagless Upright Vacuum Cleaner", "UH70832", 118.00, 32));
         appliancesArrayList.add(new Product("Carrier Installed Comfort Series Heat Pump", "HSINSTCARCHP", 2499.00, 25));
 
-        beaconProductMap.put("19272:58530", new ArrayList<Product>());
+        beaconProductMap.put("19272:58530", appliancesArrayList);
         keyViewHashMap.put("19272:58530", recyclerViewImagesAppliances);
 
         // Blueberry Blue Beacon = Aisle 3
@@ -97,6 +97,7 @@ public class ProductList extends AppCompatActivity {
                     Beacon nearestBeacon = list.get(0);
 
                     List<Product> nearestBeaconProductsList = productsNearBeacon(nearestBeacon);
+
                     int[] images = keyViewHashMap.get(String.format("%d:%d", nearestBeacon.getMajor(), nearestBeacon.getMinor()));
 
                     String s = "";
@@ -108,7 +109,7 @@ public class ProductList extends AppCompatActivity {
 //                    TODO update
                     mAdapter.updateData(prepareData(nearestBeaconProductsList, images));
                     
-                    Log.d("Beacon: " + nearestBeacon.getMinor(), ". Products: " + s);
+//                    Log.d("Beacon: " + nearestBeacon.getMinor(), ". Products: " + s);
 
 
                 }
@@ -224,11 +225,14 @@ public class ProductList extends AppCompatActivity {
 
     private ArrayList<AndroidVersion> prepareData(List<Product> nearestBeaconProductsList, int[] images) {
 
+        Log.d("Called!", String.valueOf(nearestBeaconProductsList.size()));
+
         ArrayList<AndroidVersion> av = new ArrayList<>();
 
         for (int i = 0; i < nearestBeaconProductsList.size(); i++) {
             AndroidVersion mAndroidVersion = new AndroidVersion();
             mAndroidVersion.setAndroidVersionName(nearestBeaconProductsList.get(i).getName());
+            Log.d("Log", nearestBeaconProductsList.get(i).getName());
             mAndroidVersion.setrecyclerViewImage(images[i]);
             av.add(mAndroidVersion);
         }
