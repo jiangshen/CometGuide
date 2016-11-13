@@ -25,12 +25,12 @@ import java.util.UUID;
 
 public class ProductList extends AppCompatActivity {
 
-    private final String recyclerViewTitleText[] = {"Android", "RecyclerView", "Android List", "GridView", "ListView", "Tutorial", "Example", "CardView", "Lollipop", "Marshmallow", "Custom ListView", "Custom GridView"
-    };
+    public RecyclerView mRecyclerView;
+    public AndroidDataAdapter mAdapter;
 
     private final int recyclerViewImages[] = {
-            R.drawable.tools, R.drawable.tools, R.drawable.tools, R.drawable.tools, R.drawable.tools, R.drawable.tools,
-            R.drawable.tools, R.drawable.tools, R.drawable.tools, R.drawable.tools, R.drawable.tools, R.drawable.tools
+            R.drawable.eone, R.drawable.etwo, R.drawable.ethree, R.drawable.efour, R.drawable.efive,
+            R.drawable.esix, R.drawable.eseven
     };
 
     private BeaconManager beaconManager;
@@ -68,7 +68,6 @@ public class ProductList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
-        initRecyclerViews();
 
         SystemRequirementsChecker.checkWithDefaultDialogs(this);
 
@@ -89,11 +88,18 @@ public class ProductList extends AppCompatActivity {
                     for (int i = 0; i < nearestBeaconProductsList.size(); i++) {
                         s += nearestBeaconProductsList.get(i).getName() + ", ";
                     }
-
+                    
+//                    TODO update
+                    mAdapter.updateData(prepareData(nearestBeaconProductsList));
+                    
                     Log.d("Beacon: " + nearestBeacon.getMinor(), ". Products: " + s);
+
+
                 }
             }
         });
+
+        initRecyclerViews();
     }
 
     @Override
@@ -130,13 +136,14 @@ public class ProductList extends AppCompatActivity {
     }
 
     private void initRecyclerViews() {
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        ArrayList<AndroidVersion> av = prepareData();
-        AndroidDataAdapter mAdapter = new AndroidDataAdapter(getApplicationContext(), av);
+//        // FIXME: !!!!!!
+        ArrayList<AndroidVersion> av = prepareData(new ArrayList<Product>());
+        mAdapter = new AndroidDataAdapter(getApplicationContext(), av);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnItemTouchListener(
@@ -146,6 +153,19 @@ public class ProductList extends AppCompatActivity {
                         switch (i) {
                             case 0:
                                 Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
+
+//                                ArrayList<AndroidVersion> av = new ArrayList<>();
+//
+//                                List<Product> p = BEACON_PRODUCT_MAP.get("19272:58530");
+//
+//                                for (int j = 0; j < p.size(); j++) {
+//                                    AndroidVersion mAndroidVersion = new AndroidVersion();
+//                                    mAndroidVersion.setAndroidVersionName(p.get(j).getName());
+//                                    mAndroidVersion.setrecyclerViewImage(recyclerViewImages[j]);
+//                                    av.add(mAndroidVersion);
+//                                }
+//
+//                                mAdapter.updateData(av);
                                 break;
                             case 1:
                                 Toast.makeText(view.getContext(), "position= " + i, Toast.LENGTH_LONG).show();
@@ -187,12 +207,13 @@ public class ProductList extends AppCompatActivity {
 
     }
 
-    private ArrayList<AndroidVersion> prepareData() {
+    private ArrayList<AndroidVersion> prepareData(List<Product> nearestBeaconProductsList) {
 
         ArrayList<AndroidVersion> av = new ArrayList<>();
-        for (int i = 0; i < recyclerViewTitleText.length; i++) {
+
+        for (int i = 0; i < nearestBeaconProductsList.size(); i++) {
             AndroidVersion mAndroidVersion = new AndroidVersion();
-            mAndroidVersion.setAndroidVersionName(recyclerViewTitleText[i]);
+            mAndroidVersion.setAndroidVersionName(nearestBeaconProductsList.get(i).getName());
             mAndroidVersion.setrecyclerViewImage(recyclerViewImages[i]);
             av.add(mAndroidVersion);
         }

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AndroidDataAdapter extends RecyclerView.Adapter<AndroidDataAdapter.ViewHolder> {
 
@@ -22,6 +23,11 @@ public class AndroidDataAdapter extends RecyclerView.Adapter<AndroidDataAdapter.
     public AndroidDataAdapter(Context context, ArrayList<AndroidVersion> android) {
         this.arrayList = android;
         this.mcontext = context;
+    }
+
+    public void updateData(ArrayList<AndroidVersion> newArray) {
+        this.arrayList = newArray;
+        this.notifyDataSetChanged();
     }
 
     @Override
