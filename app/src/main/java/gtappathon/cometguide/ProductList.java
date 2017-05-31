@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,8 @@ public class ProductList extends AppCompatActivity {
 
     private BeaconManager beaconManager;
     private Region region;
+
+    private String prevMajorMinorKey;
 
     private static Map<String, List<Product>> BEACON_PRODUCT_MAP = null;
 
@@ -112,6 +115,8 @@ public class ProductList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
+        prevMajorMinorKey = "";
+
         categoryTextView = (TextView) findViewById(R.id.tv_title);
         characterTextView = (TextView) findViewById(R.id.tv_title_s);
 
@@ -134,13 +139,23 @@ public class ProductList extends AppCompatActivity {
 
                     categoryTextView.setText(keyCategoryHashMap.get(majorMinorKeyString));
                     characterTextView.setText(keyCategoryHashMap.get(majorMinorKeyString).substring(0,1));
+
                     mAdapter.updateData(prepareData(nearestBeaconProductsList, images));
 
+//                    if (!prevMajorMinorKey.equals(majorMinorKeyString)) {
+//                        rvDisappear();
+//                        mAdapter.updateData(prepareData(nearestBeaconProductsList, images));
+//                        rvAppear();
+//                    } else {
+//                        mAdapter.updateData(prepareData(nearestBeaconProductsList, images));
+//                    }
+                    prevMajorMinorKey = majorMinorKeyString;
                 }
             }
         });
 
         initRecyclerViews();
+
     }
 
     @Override
@@ -182,10 +197,14 @@ public class ProductList extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+//        rvDisappear();
+
         int[] emptyImagesArray = {};
         ArrayList<AndroidVersion> av = prepareData(new ArrayList<Product>(), emptyImagesArray);
         mAdapter = new AndroidDataAdapter(getApplicationContext(), av);
         mRecyclerView.setAdapter(mAdapter);
+
+//        rvAppear();
 
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -221,5 +240,23 @@ public class ProductList extends AppCompatActivity {
         intent.putExtra("image", images[i]);
 
         startActivity(intent);
+    }
+
+    /**
+     * Animation for RecyclerView to fade in
+     */
+    private void rvAppear() {
+        final AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(1000);
+        mRecyclerView.startAnimation(anim);
+    }
+
+    /**
+     * Animation for RecyclerView to fade out
+     */
+    private void rvDisappear() {
+        final AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+        anim.setDuration(1000);
+        mRecyclerView.startAnimation(anim);
     }
 }
